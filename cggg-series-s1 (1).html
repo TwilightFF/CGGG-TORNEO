@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CGGG SERIES S1 — Free Fire PvP Tournament</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#F5C400;--gold-dark:#C89B00;--gold-light:#FFE066;
+  --navy:#1A2A5E;--navy-dark:#0D1A3A;--navy-mid:#243580;
+  --white:#FFFFFF;--gray:#8A9BB5;--danger:#E63946;--bg:#0A1128;
+  --green:#00E676;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden;}
+
+/* NAV */
+nav{position:fixed;top:0;width:100%;z-index:1000;background:rgba(10,17,40,0.97);backdrop-filter:blur(12px);border-bottom:2px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;}
+.nav-logo{font-family:'Bebas Neue';font-size:1.8rem;color:var(--gold);letter-spacing:3px;}
+.nav-links{display:flex;gap:2rem;list-style:none;}
+.nav-links a{color:var(--gray);text-decoration:none;font-weight:600;font-size:0.88rem;letter-spacing:1px;text-transform:uppercase;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+.nav-admin-btn{background:none;border:1px solid var(--navy-mid);color:var(--gray);padding:6px 14px;border-radius:4px;cursor:pointer;font-family:'Rajdhani';font-size:0.85rem;letter-spacing:1px;transition:all .2s;}
+.nav-admin-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:80px 2rem 2rem;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse at 50% 40%,rgba(245,196,0,0.12) 0%,transparent 65%),linear-gradient(180deg,var(--navy-dark) 0%,var(--bg) 100%);}
+.hex-grid{position:absolute;inset:0;z-index:0;opacity:0.04;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='52'%3E%3Cpolygon points='30,2 58,17 58,47 30,62 2,47 2,17' fill='none' stroke='%23F5C400' stroke-width='1'/%3E%3C/svg%3E");background-size:60px 52px;}
+.hero-badge{font-family:'Rajdhani';font-size:0.85rem;font-weight:700;letter-spacing:4px;color:var(--gold);text-transform:uppercase;border:1px solid rgba(245,196,0,0.4);padding:6px 20px;border-radius:2px;margin-bottom:1.5rem;position:relative;z-index:1;background:rgba(245,196,0,0.06);}
+.hero-title{font-family:'Bebas Neue';font-size:clamp(4rem,12vw,9rem);line-height:0.9;position:relative;z-index:1;letter-spacing:4px;}
+.hero-title .cggg{color:var(--gold);display:block;text-shadow:0 0 60px rgba(245,196,0,0.5);}
+.hero-title .series{color:var(--white);display:block;font-size:0.55em;letter-spacing:12px;}
+.hero-title .s1{color:transparent;-webkit-text-stroke:2px var(--gold);display:block;font-size:1.1em;margin-top:-10px;}
+.hero-sub{font-size:1.1rem;color:var(--gray);margin:1.5rem 0 2.5rem;letter-spacing:2px;text-transform:uppercase;position:relative;z-index:1;}
+.hero-stats{display:flex;gap:3rem;position:relative;z-index:1;margin-bottom:2rem;}
+.stat{text-align:center;}
+.stat-num{font-family:'Bebas Neue';font-size:2.5rem;color:var(--gold);line-height:1;}
+.stat-label{font-size:0.75rem;letter-spacing:2px;color:var(--gray);text-transform:uppercase;}
+.cta-btn{background:var(--gold);color:var(--navy-dark);border:none;padding:14px 40px;font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:3px;cursor:pointer;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:all .2s;position:relative;z-index:1;text-decoration:none;display:inline-block;}
+.cta-btn:hover{background:var(--gold-light);transform:translateY(-2px);}
+.hero-line{position:absolute;background:linear-gradient(90deg,transparent,var(--gold),transparent);height:1px;opacity:0.3;animation:scanline 4s linear infinite;}
+.hero-line:nth-child(1){width:80%;top:25%;animation-delay:0s;}
+.hero-line:nth-child(2){width:60%;top:65%;animation-delay:2s;}
+@keyframes scanline{0%{left:-100%}100%{left:100%}}
+
+/* SECTIONS */
+.section-wrap{padding:80px 2rem;max-width:1200px;margin:0 auto;}
+.section-label{font-size:0.75rem;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:0.5rem;font-weight:700;}
+.section-title{font-family:'Bebas Neue';font-size:clamp(2rem,5vw,3.5rem);letter-spacing:3px;line-height:1;margin-bottom:0.5rem;}
+.divider{width:60px;height:3px;background:var(--gold);margin:0.75rem 0 2.5rem;}
+
+/* RONDAS TABS */
+.rounds-tabs{display:flex;gap:0.5rem;margin-bottom:2rem;flex-wrap:wrap;}
+.round-tab{background:rgba(26,42,94,0.4);border:1px solid rgba(245,196,0,0.2);color:var(--gray);padding:8px 20px;border-radius:4px;cursor:pointer;font-family:'Bebas Neue';font-size:1rem;letter-spacing:2px;transition:all .2s;}
+.round-tab:hover{border-color:var(--gold);color:var(--gold);}
+.round-tab.active{background:var(--gold);color:var(--navy-dark);border-color:var(--gold);}
+
+/* ROUND PANEL */
+.round-panel{display:none;}
+.round-panel.active{display:block;}
+
+/* MATCH CARDS */
+.matches-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.2rem;}
+.match-card{background:linear-gradient(135deg,rgba(26,42,94,0.8),rgba(13,26,58,0.9));border:1px solid rgba(245,196,0,0.2);border-radius:4px;padding:1.2rem 1.5rem;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;}
+.match-card:hover{border-color:rgba(245,196,0,0.5);transform:translateY(-2px);}
+.match-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--gold);}
+.match-num{font-size:0.7rem;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:1rem;}
+.match-players{display:flex;align-items:center;gap:1rem;}
+.mp{flex:1;text-align:center;font-family:'Bebas Neue';font-size:1.4rem;letter-spacing:1px;}
+.mp.winner{color:var(--gold);}
+.mp.loser{color:var(--gray);text-decoration:line-through;}
+.mp.tbd{color:var(--gray);font-size:1rem;font-family:'Rajdhani';}
+.vs-badge{background:var(--gold);color:var(--navy-dark);font-family:'Bebas Neue';font-size:0.85rem;letter-spacing:2px;padding:4px 10px;clip-path:polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%);flex-shrink:0;}
+.match-score{margin-top:0.7rem;text-align:center;font-family:'Bebas Neue';font-size:1.1rem;color:var(--gold);letter-spacing:2px;}
+.match-status{margin-top:0.6rem;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;text-align:center;}
+.s-pending{color:var(--gray);}
+.s-live{color:var(--green);animation:blink 1.4s ease-in-out infinite;}
+.s-done{color:var(--gold);}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* BYE card */
+.bye-card{background:rgba(26,42,94,0.3);border:1px dashed rgba(245,196,0,0.3);border-radius:4px;padding:1.2rem 1.5rem;display:flex;align-items:center;gap:1rem;}
+.bye-player{font-family:'Bebas Neue';font-size:1.3rem;color:var(--gold);}
+.bye-label{font-size:0.75rem;letter-spacing:3px;color:var(--gray);text-transform:uppercase;}
+
+/* INFO */
+#info{border-top:1px solid rgba(245,196,0,0.1);}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.5rem;}
+.info-card{background:rgba(26,42,94,0.35);border:1px solid rgba(245,196,0,0.15);border-radius:4px;padding:1.5rem;}
+.info-icon{font-size:2rem;margin-bottom:0.75rem;}
+.info-card h3{font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:2px;color:var(--gold);margin-bottom:0.5rem;}
+.info-card p{font-size:0.95rem;color:var(--gray);line-height:1.6;}
+
+/* RULES */
+#rules{border-top:1px solid rgba(245,196,0,0.1);}
+.rules-list{list-style:none;display:flex;flex-direction:column;gap:0.75rem;}
+.rules-list li{display:flex;align-items:flex-start;gap:1rem;background:rgba(26,42,94,0.3);padding:1rem 1.2rem;border-radius:4px;border-left:3px solid var(--gold);}
+.rule-num{font-family:'Bebas Neue';color:var(--gold);font-size:1.1rem;min-width:24px;}
+.rule-text{font-size:0.95rem;color:var(--gray);line-height:1.5;}
+
+/* CONTACT */
+#contact{border-top:1px solid rgba(245,196,0,0.1);}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+.contact-item{display:flex;align-items:center;gap:1rem;padding:1.2rem;background:rgba(26,42,94,0.3);border-radius:4px;}
+.contact-icon{font-size:1.5rem;}
+.contact-label{font-size:0.75rem;letter-spacing:2px;color:var(--gray);text-transform:uppercase;}
+.contact-value{font-family:'Bebas Neue';font-size:1.2rem;letter-spacing:1px;color:var(--white);}
+
+footer{text-align:center;padding:2rem;border-top:1px solid rgba(245,196,0,0.15);font-size:0.85rem;color:var(--gray);letter-spacing:2px;}
+footer span{color:var(--gold);}
+
+/* ══ ADMIN ══ */
+#admin-overlay{display:none;position:fixed;inset:0;z-index:2000;background:rgba(5,10,25,0.98);backdrop-filter:blur(8px);overflow-y:auto;}
+#admin-overlay.active{display:block;}
+.admin-wrap{max-width:1100px;margin:0 auto;padding:2rem;}
+.admin-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;padding-bottom:1rem;border-bottom:2px solid var(--gold);}
+.admin-title{font-family:'Bebas Neue';font-size:2.2rem;color:var(--gold);letter-spacing:4px;}
+.close-btn{background:rgba(230,57,70,0.15);border:1px solid var(--danger);color:var(--danger);padding:8px 20px;border-radius:4px;cursor:pointer;font-family:'Rajdhani';font-weight:700;font-size:0.9rem;letter-spacing:2px;transition:all .2s;}
+.close-btn:hover{background:var(--danger);color:white;}
+.admin-tabs{display:flex;gap:0.5rem;margin-bottom:1.5rem;border-bottom:1px solid rgba(245,196,0,0.2);padding-bottom:1rem;}
+.admin-tab{background:none;border:1px solid rgba(245,196,0,0.2);color:var(--gray);padding:7px 18px;border-radius:4px;cursor:pointer;font-family:'Bebas Neue';font-size:1rem;letter-spacing:2px;transition:all .2s;}
+.admin-tab.active,.admin-tab:hover{background:var(--gold);color:var(--navy-dark);border-color:var(--gold);}
+.admin-section{display:none;}
+.admin-section.active{display:block;}
+.panel-box{background:rgba(26,42,94,0.4);border:1px solid rgba(245,196,0,0.2);border-radius:6px;padding:1.5rem;margin-bottom:1.5rem;}
+.panel-box h2{font-family:'Bebas Neue';font-size:1.4rem;letter-spacing:3px;color:var(--gold);margin-bottom:1.2rem;}
+
+/* WHEEL */
+.wheel-container{display:flex;flex-direction:column;align-items:center;gap:1rem;}
+#spin-result{text-align:center;font-family:'Bebas Neue';font-size:1.5rem;color:var(--gold);letter-spacing:2px;min-height:2rem;}
+.spin-btn{background:var(--gold);color:var(--navy-dark);border:none;padding:12px 36px;font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:3px;cursor:pointer;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:all .2s;width:100%;}
+.spin-btn:hover{background:var(--gold-light);}
+.spin-btn:disabled{background:var(--gray);cursor:not-allowed;}
+.players-list{max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1rem;}
+.player-item{display:flex;align-items:center;justify-content:space-between;background:rgba(10,17,40,0.6);border:1px solid rgba(245,196,0,0.15);padding:7px 12px;border-radius:4px;}
+.player-item span{font-size:0.9rem;font-weight:600;}
+.del-btn{background:none;border:none;color:var(--danger);cursor:pointer;font-size:1rem;padding:2px 6px;border-radius:3px;transition:background .2s;}
+.del-btn:hover{background:rgba(230,57,70,0.15);}
+.add-player-row{display:flex;gap:0.5rem;}
+.add-player-row input{flex:1;background:rgba(10,17,40,0.8);border:1px solid rgba(245,196,0,0.3);color:var(--white);padding:8px 12px;border-radius:4px;font-family:'Rajdhani';font-size:0.9rem;outline:none;}
+.add-player-row input:focus{border-color:var(--gold);}
+.add-btn{background:rgba(245,196,0,0.15);border:1px solid var(--gold);color:var(--gold);padding:8px 18px;border-radius:4px;cursor:pointer;font-family:'Bebas Neue';font-size:1rem;letter-spacing:2px;transition:all .2s;}
+.add-btn:hover{background:var(--gold);color:var(--navy-dark);}
+.admin-grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+
+/* MATCH EDITOR */
+.round-editor-title{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:3px;color:var(--gold);margin:1.2rem 0 0.8rem;border-bottom:1px solid rgba(245,196,0,0.2);padding-bottom:0.4rem;}
+.me-row{display:flex;align-items:center;gap:0.6rem;padding:0.7rem;background:rgba(10,17,40,0.6);border:1px solid rgba(245,196,0,0.12);border-radius:4px;margin-bottom:0.5rem;flex-wrap:wrap;}
+.me-num{font-family:'Bebas Neue';color:var(--gold);font-size:0.95rem;min-width:28px;}
+.me-row select,.me-row input{background:rgba(10,17,40,0.9);border:1px solid rgba(245,196,0,0.25);color:var(--white);padding:5px 8px;border-radius:3px;font-family:'Rajdhani';font-size:0.85rem;outline:none;}
+.me-row select{min-width:110px;}
+.me-row input.score-inp{width:60px;text-align:center;}
+.me-label{font-size:0.7rem;letter-spacing:2px;color:var(--gray);text-transform:uppercase;}
+.save-me-btn{background:var(--gold);color:var(--navy-dark);border:none;padding:5px 14px;border-radius:3px;cursor:pointer;font-family:'Bebas Neue';font-size:0.9rem;letter-spacing:2px;transition:background .2s;white-space:nowrap;}
+.save-me-btn:hover{background:var(--gold-light);}
+.field-group{display:flex;flex-direction:column;gap:4px;margin-bottom:0.75rem;}
+.field-group label{font-size:0.75rem;letter-spacing:2px;color:var(--gold);text-transform:uppercase;}
+.field-group input{background:rgba(10,17,40,0.8);border:1px solid rgba(245,196,0,0.25);color:var(--white);padding:8px 12px;border-radius:4px;font-family:'Rajdhani';font-size:0.9rem;outline:none;}
+.field-group input:focus{border-color:var(--gold);}
+.save-info-btn{background:var(--gold);color:var(--navy-dark);border:none;padding:10px 24px;border-radius:4px;cursor:pointer;font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:3px;transition:background .2s;width:100%;}
+.save-info-btn:hover{background:var(--gold-light);}
+
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--navy-mid);border-radius:3px;}
+#toast{position:fixed;bottom:2rem;right:2rem;z-index:9999;background:var(--gold);color:var(--navy-dark);padding:10px 20px;border-radius:4px;font-family:'Bebas Neue';font-size:1rem;letter-spacing:2px;transform:translateY(100px);opacity:0;transition:all .3s;}
+#toast.show{transform:translateY(0);opacity:1;}
+@media(max-width:768px){
+  .contact-grid{grid-template-columns:1fr;}
+  .hero-stats{gap:1.5rem;}
+  nav{padding:0 1rem;}
+  .nav-links{display:none;}
+  .admin-grid2{grid-template-columns:1fr;}
+  .me-row{flex-direction:column;align-items:flex-start;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">CGGG</div>
+  <ul class="nav-links">
+    <li><a href="#hero">Inicio</a></li>
+    <li><a href="#brackets">Enfrentamientos</a></li>
+    <li><a href="#info">Info</a></li>
+    <li><a href="#rules">Reglas</a></li>
+    <li><a href="#contact">Contacto</a></li>
+  </ul>
+  <button class="nav-admin-btn" onclick="toggleAdmin()">⚙ ADMIN</button>
+</nav>
+
+<!-- HERO -->
+<div id="hero">
+  <div class="hero-bg"></div>
+  <div class="hex-grid"></div>
+  <div class="hero-line"></div>
+  <div class="hero-line"></div>
+  <div class="hero-badge">🔥 Free Fire PvP · Season 1</div>
+  <h1 class="hero-title">
+    <span class="cggg">CGGG</span>
+    <span class="series">Series</span>
+    <span class="s1">S1</span>
+  </h1>
+  <p class="hero-sub" id="hero-tagline">El torneo 1v1 más competitivo de la región</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">20</div><div class="stat-label">Jugadores</div></div>
+    <div class="stat"><div class="stat-num" id="stat-matches">10</div><div class="stat-label">Partidas R1</div></div>
+    <div class="stat"><div class="stat-num" id="stat-date">TBD</div><div class="stat-label">Fecha</div></div>
+    <div class="stat"><div class="stat-num" id="stat-prize">—</div><div class="stat-label">Premio</div></div>
+  </div>
+  <a href="#brackets" class="cta-btn">Ver Enfrentamientos</a>
+</div>
+
+<!-- BRACKETS -->
+<section id="brackets" style="border-top:1px solid rgba(245,196,0,0.1);">
+<div class="section-wrap">
+  <div class="section-label">Bracket</div>
+  <h2 class="section-title">Enfrentamientos</h2>
+  <div class="divider"></div>
+
+  <div class="rounds-tabs">
+    <button class="round-tab active" onclick="showRound('r1',this)">Primera Ronda</button>
+    <button class="round-tab" onclick="showRound('r2',this)">Octavos</button>
+    <button class="round-tab" onclick="showRound('rq',this)">Cuartos</button>
+    <button class="round-tab" onclick="showRound('rsf',this)">Semifinal</button>
+    <button class="round-tab" onclick="showRound('rf',this)">Final</button>
+  </div>
+
+  <!-- R1 -->
+  <div class="round-panel active" id="round-r1">
+    <div class="matches-grid" id="grid-r1"></div>
+  </div>
+  <!-- R2 -->
+  <div class="round-panel" id="round-r2">
+    <div class="matches-grid" id="grid-r2"></div>
+  </div>
+  <!-- Cuartos -->
+  <div class="round-panel" id="round-rq">
+    <p style="color:var(--gray);font-size:0.85rem;letter-spacing:1px;margin-bottom:1.2rem;">Un jugador clasifica directamente (Bye/sorteo). Los otros 4 compiten en cuartos especiales.</p>
+    <div class="matches-grid" id="grid-rq"></div>
+  </div>
+  <!-- Semifinal -->
+  <div class="round-panel" id="round-rsf">
+    <div class="matches-grid" id="grid-rsf"></div>
+  </div>
+  <!-- Final -->
+  <div class="round-panel" id="round-rf">
+    <div class="matches-grid" id="grid-rf"></div>
+  </div>
+</div>
+</section>
+
+<!-- INFO -->
+<section id="info">
+<div class="section-wrap">
+  <div class="section-label">Acerca del torneo</div>
+  <h2 class="section-title">Información General</h2>
+  <div class="divider"></div>
+  <div class="info-grid">
+    <div class="info-card"><div class="info-icon">🗓️</div><h3>Fecha</h3><p id="info-fecha">Por confirmar. Mantente atento a nuestras redes.</p></div>
+    <div class="info-card"><div class="info-icon">🎮</div><h3>Formato</h3><p>1 vs 1 · Eliminación directa · Free Fire · Sala personalizada.</p></div>
+    <div class="info-card"><div class="info-icon">🏆</div><h3>Premio</h3><p id="info-premio">Premio en definición. Se anunciará próximamente.</p></div>
+    <div class="info-card"><div class="info-icon">🔢</div><h3>Estructura</h3><p>20 jugadores · 10 partidas 1ª ronda · 5 en 2ª · Cuartos → Semis → Final.</p></div>
+  </div>
+</div>
+</section>
+
+<!-- RULES -->
+<section id="rules">
+<div class="section-wrap">
+  <div class="section-label">Reglamento</div>
+  <h2 class="section-title">Reglas del Torneo</h2>
+  <div class="divider"></div>
+  <ul class="rules-list">
+    <li><span class="rule-num">01</span><span class="rule-text">Cada enfrentamiento es 1 vs 1 en sala privada de Free Fire.</span></li>
+    <li><span class="rule-num">02</span><span class="rule-text">El jugador debe estar presente 5 minutos antes de su partida o pierde por W.O.</span></li>
+    <li><span class="rule-num">03</span><span class="rule-text">Ningún hack, cheat o modificación está permitido. Descalificación inmediata.</span></li>
+    <li><span class="rule-num">04</span><span class="rule-text">El resultado debe ser capturado en pantalla y enviado al organizador.</span></li>
+    <li><span class="rule-num">05</span><span class="rule-text">El organizador tiene la última decisión ante cualquier disputa.</span></li>
+    <li><span class="rule-num">06</span><span class="rule-text">Respeto entre participantes obligatorio. Conducta antideportiva = descalificación.</span></li>
+    <li><span class="rule-num">07</span><span class="rule-text">Los emparejamientos se determinan mediante la ruleta oficial del torneo.</span></li>
+  </ul>
+</div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+<div class="section-wrap">
+  <div class="section-label">Contacto</div>
+  <h2 class="section-title">¿Tienes Dudas?</h2>
+  <div class="divider"></div>
+  <div class="contact-grid">
+    <div class="contact-item"><div class="contact-icon">💬</div><div><div class="contact-label">WhatsApp / Telegram</div><div class="contact-value" id="c-whatsapp">Por confirmar</div></div></div>
+    <div class="contact-item"><div class="contact-icon">📸</div><div><div class="contact-label">Instagram</div><div class="contact-value" id="c-instagram">@CGGG</div></div></div>
+    <div class="contact-item"><div class="contact-icon">🎮</div><div><div class="contact-label">Discord</div><div class="contact-value" id="c-discord">Por confirmar</div></div></div>
+    <div class="contact-item"><div class="contact-icon">📧</div><div><div class="contact-label">Email</div><div class="contact-value" id="c-email">Por confirmar</div></div></div>
+  </div>
+</div>
+</section>
+
+<footer><p>© 2025 <span>CGGG SERIES S1</span> — Free Fire PvP Tournament · Todos los derechos reservados</p></footer>
+<div id="toast"></div>
+
+<!-- ══════════════ ADMIN ══════════════ -->
+<div id="admin-overlay">
+  <div id="admin-login" style="display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:1.5rem;">
+    <div style="font-family:'Bebas Neue';font-size:2rem;color:var(--gold);letter-spacing:4px;">🔐 PANEL ADMIN</div>
+    <input id="pwd-input" type="password" placeholder="Contraseña..."
+      style="background:rgba(26,42,94,0.5);border:1px solid rgba(245,196,0,0.4);color:white;padding:12px 24px;border-radius:4px;font-size:1rem;outline:none;text-align:center;font-family:'Rajdhani';"
+      onkeydown="if(event.key==='Enter')checkPwd()">
+    <button onclick="checkPwd()" style="background:var(--gold);color:var(--navy-dark);border:none;padding:10px 36px;font-family:'Bebas Neue';font-size:1.2rem;letter-spacing:3px;cursor:pointer;border-radius:4px;">ENTRAR</button>
+    <button onclick="closeAdmin()" style="background:none;border:none;color:var(--gray);cursor:pointer;font-family:'Rajdhani';font-size:0.9rem;letter-spacing:2px;">Cancelar</button>
+    <div id="pwd-error" style="color:var(--danger);font-size:0.85rem;letter-spacing:2px;display:none;">Contraseña incorrecta</div>
+  </div>
+
+  <div id="admin-content" style="display:none;">
+  <div class="admin-wrap">
+    <div class="admin-header">
+      <div class="admin-title">⚙ Admin — CGGG S1</div>
+      <button class="close-btn" onclick="closeAdmin()">✕ CERRAR</button>
+    </div>
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="showAdminTab('tab-matches',this)">⚔ Partidas</button>
+      <button class="admin-tab" onclick="showAdminTab('tab-wheel',this)">🎡 Ruleta</button>
+      <button class="admin-tab" onclick="showAdminTab('tab-info',this)">📋 Info</button>
+    </div>
+
+    <!-- TAB: PARTIDAS -->
+    <div class="admin-section active" id="tab-matches">
+      <div id="admin-rounds-ui"></div>
+    </div>
+
+    <!-- TAB: RULETA -->
+    <div class="admin-section" id="tab-wheel">
+      <div class="admin-grid2">
+        <div class="panel-box">
+          <h2>🎡 Ruleta</h2>
+          <div class="wheel-container">
+            <div style="position:relative;">
+              <div style="position:absolute;left:50%;transform:translateX(-50%);top:-14px;z-index:10;width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-top:24px solid var(--gold);filter:drop-shadow(0 2px 4px rgba(0,0,0,.5));"></div>
+              <canvas id="wheel-canvas" width="300" height="300"></canvas>
+            </div>
+            <div id="spin-result">— Girá para seleccionar —</div>
+            <button class="spin-btn" id="spin-btn" onclick="spinWheel()">🔥 GIRAR RULETA</button>
+          </div>
+        </div>
+        <div class="panel-box">
+          <h2>👥 Jugadores del torneo</h2>
+          <div class="players-list" id="players-list"></div>
+          <div class="add-player-row">
+            <input type="text" id="new-player-input" placeholder="Nuevo jugador..." maxlength="20" onkeydown="if(event.key==='Enter')addPlayer()">
+            <button class="add-btn" onclick="addPlayer()">+ ADD</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: INFO -->
+    <div class="admin-section" id="tab-info">
+      <div class="panel-box" style="max-width:500px;">
+        <h2>📋 Info del Torneo</h2>
+        <div class="field-group"><label>Fecha</label><input type="text" id="edit-fecha" placeholder="Ej: 15 julio 2025 — 7:00 PM"></div>
+        <div class="field-group"><label>Premio</label><input type="text" id="edit-premio" placeholder="Ej: $50 USD"></div>
+        <div class="field-group"><label>WhatsApp / Telegram</label><input type="text" id="edit-whatsapp" placeholder="+504 0000-0000"></div>
+        <div class="field-group"><label>Instagram</label><input type="text" id="edit-instagram" placeholder="@usuario"></div>
+        <div class="field-group"><label>Discord</label><input type="text" id="edit-discord" placeholder="discord.gg/server"></div>
+        <div class="field-group"><label>Email</label><input type="text" id="edit-email" placeholder="correo@ejemplo.com"></div>
+        <div class="field-group"><label>Tagline hero</label><input type="text" id="edit-tagline" placeholder="Frase principal"></div>
+        <button class="save-info-btn" onclick="saveInfo()">💾 GUARDAR</button>
+      </div>
+    </div>
+
+  </div><!-- /admin-wrap -->
+  </div><!-- /admin-content -->
+</div><!-- /admin-overlay -->
+
+<script>
+// ══════════════════════════════
+// DATA
+// ══════════════════════════════
+const PASS = 'cggg2025';
+
+// Master player list (for wheel & dropdowns)
+let players = ['Miguel','Marlon','matias','Emma','jesus','Pepe','Andres','Ricardo',
+  'Isaac','Cristian','Ferzin','Wilmer','Levi','Chino','Ivan','Jeshua','Nehi','UDG','Ismael','Maikol'];
+
+// Rounds data
+let rounds = {
+  r1: {
+    label:'Primera Ronda',
+    matches:[
+      {n:'Partido 1',p1:'Miguel',p2:'Marlon',status:'done',score:'6-7',winner:'Marlon'},
+      {n:'Partido 2',p1:'matias',p2:'Emma',status:'done',score:'0-7',winner:'Emma'},
+      {n:'Partido 3',p1:'jesus',p2:'Pepe',status:'done',score:'7-3',winner:'jesus'},
+      {n:'Partido 4',p1:'Andres',p2:'Ricardo',status:'done',score:'0-7',winner:'Ricardo'},
+      {n:'Partido 5',p1:'Isaac',p2:'Cristian',status:'done',score:'4-7',winner:'Cristian'},
+      {n:'Partido 6',p1:'Ferzin',p2:'Wilmer',status:'done',score:'7-4',winner:'Ferzin'},
+      {n:'Partido 7',p1:'Levi',p2:'Chino',status:'done',score:'7-0',winner:'Levi'},
+      {n:'Partido 8',p1:'Ivan',p2:'Jeshua',status:'done',score:'0-7',winner:'Jeshua'},
+      {n:'Partido 9',p1:'Nehi',p2:'UDG',status:'done',score:'7-4',winner:'Nehi'},
+      {n:'Partido 10',p1:'Ismael',p2:'Maikol',status:'done',score:'4-7',winner:'Maikol'},
+    ]
+  },
+  r2: {
+    label:'Octavos',
+    matches:[
+      {n:'Partido 1',p1:'Marlon',p2:'Ricardo',status:'pending',score:'',winner:''},
+      {n:'Partido 2',p1:'Cristian',p2:'Jesus',status:'pending',score:'',winner:''},
+      {n:'Partido 3',p1:'Maikol',p2:'Nehi',status:'pending',score:'',winner:''},
+      {n:'Partido 4',p1:'Fezin',p2:'Isaac',status:'pending',score:'',winner:''},
+
+
+      
+      {n:'Partido 5',p1:'Jeshua',p2:'Miguel',status:'pending',score:'',winner:''},
+      {n:'Partido 6',p1:'Emma',p2:'Pepe',status:'pending',score:'',winner:''},
+      {n:'Partido 7',p1:'Levi',p2:'Ismael',status:'pending',score:'',winner:''},
+      {n:'Partido 8',p1:'UDG',p2:'Wilmer',status:'pending',score:'',winner:''},
+    ]
+  },
+  rq: {
+    label:'Cuartos',
+    matches:[
+      {n:'Bye (sorteo)',p1:'Ganador A/B/C/D/E',p2:'— BYE —',status:'pending',score:'',winner:'',bye:true},
+      {n:'Cuartos Especial 1',p1:'Ganador A',p2:'Ganador B',status:'pending',score:'',winner:''},
+      {n:'Cuartos Especial 2',p1:'Ganador C',p2:'Ganador D',status:'pending',score:'',winner:''},
+    ]
+  },
+  rsf: {
+    label:'Semifinal',
+    matches:[
+      {n:'Semifinal 1',p1:'Ganador Bye',p2:'Ganador Cuartos E1',status:'pending',score:'',winner:''},
+      {n:'Semifinal 2',p1:'Ganador Cuartos E2',p2:'Ganador E',status:'pending',score:'',winner:''},
+    ]
+  },
+  rf: {
+    label:'Final',
+    matches:[
+      {n:'Final',p1:'Ganador SF1',p2:'Ganador SF2',status:'pending',score:'',winner:''},
+    ]
+  }
+};
+
+// ══════════════════════════════
+// ADMIN AUTH
+// ══════════════════════════════
+function toggleAdmin(){
+  document.getElementById('admin-overlay').classList.add('active');
+  document.getElementById('admin-login').style.display='flex';
+  document.getElementById('admin-content').style.display='none';
+  document.getElementById('pwd-error').style.display='none';
+  document.getElementById('pwd-input').value='';
+  setTimeout(()=>document.getElementById('pwd-input').focus(),200);
+}
+function checkPwd(){
+  if(document.getElementById('pwd-input').value===PASS){
+    document.getElementById('admin-login').style.display='none';
+    document.getElementById('admin-content').style.display='block';
+    buildAdminRoundsUI();
+    renderWheelPlayers();
+    drawWheel();
+    loadInfoFields();
+  } else {
+    document.getElementById('pwd-error').style.display='block';
+    document.getElementById('pwd-input').value='';
+  }
+}
+function closeAdmin(){ document.getElementById('admin-overlay').classList.remove('active'); }
+
+// ══════════════════════════════
+// TABS
+// ══════════════════════════════
+function showRound(id, btn){
+  document.querySelectorAll('.round-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.round-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('round-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+function showAdminTab(id, btn){
+  document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.admin-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ══════════════════════════════
+// PUBLIC RENDER
+// ══════════════════════════════
+function renderAllPublic(){
+  Object.keys(rounds).forEach(rk=>{
+    const rData = rounds[rk];
+    const grid = document.getElementById('grid-'+rk);
+    if(!grid) return;
+    grid.innerHTML = rData.matches.map((m,i)=>{
+      if(m.bye){
+        return `<div class="bye-card">
+          <div>
+            <div class="bye-label">🎟 Pase directo (Bye)</div>
+            <div class="bye-player">${m.winner||m.p1}</div>
+          </div>
+        </div>`;
+      }
+      const sl=m.status==='live', sd=m.status==='done';
+      const sLabel = sl?'🔴 EN VIVO': sd?'✓ Finalizada':'⏳ Pendiente';
+      const sCls = sl?'s-live': sd?'s-done':'s-pending';
+      const p1cls = sd&&m.winner===m.p1?'winner': sd&&m.winner===m.p2?'loser':'';
+      const p2cls = sd&&m.winner===m.p2?'winner': sd&&m.winner===m.p1?'loser':'';
+      return `<div class="match-card">
+        <div class="match-num">${m.n}</div>
+        <div class="match-players">
+          <div class="mp ${p1cls}">${m.p1}</div>
+          <div class="vs-badge">VS</div>
+          <div class="mp ${p2cls}">${m.p2}</div>
+        </div>
+        ${m.score?`<div class="match-score">${m.score}</div>`:''}
+        <div class="match-status ${sCls}">${sLabel}</div>
+      </div>`;
+    }).join('');
+  });
+}
+
+// ══════════════════════════════
+// ADMIN MATCHES UI
+// ══════════════════════════════
+function buildAdminRoundsUI(){
+  const container = document.getElementById('admin-rounds-ui');
+  let html = '';
+  Object.keys(rounds).forEach(rk=>{
+    const rd = rounds[rk];
+    html += `<div class="round-editor-title">${rd.label}</div>`;
+    rd.matches.forEach((m,i)=>{
+      // winner options
+      const wOpts = ['',m.p1,m.p2].map(v=>`<option value="${v}" ${m.winner===v?'selected':''}>${v||'— Sin ganador —'}</option>`).join('');
+      html += `<div class="me-row" id="me-${rk}-${i}">
+        <span class="me-num">${m.n}</span>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <span class="me-label">Jugador 1</span>
+          <input type="text" value="${m.p1}" onchange="updateField('${rk}',${i},'p1',this.value)" style="min-width:110px;">
+        </div>
+        <div style="color:var(--gold);font-family:'Bebas Neue';">VS</div>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <span class="me-label">Jugador 2</span>
+          ${m.bye?`<input type="text" value="${m.p2}" disabled style="min-width:110px;opacity:.5;">`
+           :`<input type="text" value="${m.p2}" onchange="updateField('${rk}',${i},'p2',this.value)" style="min-width:110px;">`}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <span class="me-label">Marcador</span>
+          <input class="score-inp" type="text" value="${m.score}" placeholder="1-0" onchange="updateField('${rk}',${i},'score',this.value)">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <span class="me-label">Estado</span>
+          <select onchange="updateField('${rk}',${i},'status',this.value)">
+            <option value="pending" ${m.status==='pending'?'selected':''}>Pendiente</option>
+            <option value="live" ${m.status==='live'?'selected':''}>EN VIVO</option>
+            <option value="done" ${m.status==='done'?'selected':''}>Finalizada</option>
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <span class="me-label">Ganador</span>
+          <select onchange="updateField('${rk}',${i},'winner',this.value)">${wOpts}</select>
+        </div>
+        <button class="save-me-btn" onclick="saveMatch('${rk}',${i})">💾 Guardar</button>
+      </div>`;
+    });
+  });
+  container.innerHTML = html;
+}
+
+function updateField(rk,i,field,val){
+  rounds[rk].matches[i][field]=val;
+  // If winner field updated, also rebuild winner dropdown in same row
+  if(field==='p1'||field==='p2'){ rebuildWinnerSelect(rk,i); }
+}
+
+function rebuildWinnerSelect(rk,i){
+  const m = rounds[rk].matches[i];
+  const sel = document.querySelector(`#me-${rk}-${i} select[onchange*="winner"]`);
+  if(!sel) return;
+  sel.innerHTML = ['',m.p1,m.p2].map(v=>`<option value="${v}" ${m.winner===v?'selected':''}>${v||'— Sin ganador —'}</option>`).join('');
+}
+
+function saveMatch(rk,i){
+  renderAllPublic();
+  toast('Partida guardada ✓');
+}
+
+// ══════════════════════════════
+// WHEEL
+// ══════════════════════════════
+const WCOLS=['#F5C400','#1A2A5E','#F5A623','#243580','#FFE066','#0D1A3A','#C89B00','#2E4099','#FFCD33','#162348','#E8B800','#1C2F70','#FFC800','#101D4A','#FFD700','#0F1E55','#E8B000','#192860','#FFC200','#131F52'];
+let spinAngle=0, isSpinning=false;
+
+function drawWheel(){
+  const canvas=document.getElementById('wheel-canvas');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  const cx=150,cy=150,r=140,n=players.length;
+  ctx.clearRect(0,0,300,300);
+  if(!n) return;
+  const arc=(2*Math.PI)/n;
+  for(let i=0;i<n;i++){
+    const s=spinAngle+i*arc, e=s+arc;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,s,e); ctx.closePath();
+    ctx.fillStyle=WCOLS[i%WCOLS.length]; ctx.fill();
+    ctx.strokeStyle='#0A1128'; ctx.lineWidth=2; ctx.stroke();
+    ctx.save(); ctx.translate(cx,cy); ctx.rotate(s+arc/2);
+    ctx.textAlign='right';
+    ctx.fillStyle=(i%2===0)?'#0A1128':'#F5C400';
+    const fs=Math.max(8,Math.min(12,240/n));
+    ctx.font=`bold ${fs}px Rajdhani,sans-serif`;
+    const nm=players[i].length>11?players[i].substring(0,10)+'…':players[i];
+    ctx.fillText(nm,r-6,4); ctx.restore();
+  }
+  ctx.beginPath(); ctx.arc(cx,cy,20,0,2*Math.PI);
+  ctx.fillStyle='#0A1128'; ctx.fill();
+  ctx.strokeStyle='#F5C400'; ctx.lineWidth=3; ctx.stroke();
+  ctx.fillStyle='#F5C400'; ctx.font='bold 9px Rajdhani'; ctx.textAlign='center';
+  ctx.fillText('CGGG',cx,cy+3);
+}
+
+function spinWheel(){
+  if(isSpinning||players.length<2) return;
+  isSpinning=true;
+  document.getElementById('spin-btn').disabled=true;
+  document.getElementById('spin-result').textContent='🔥 Girando...';
+  const total=(Math.random()*360+1440)*(Math.PI/180);
+  const dur=4000, start=performance.now(), sa=spinAngle;
+  const ease=t=>1-Math.pow(1-t,3);
+  function anim(now){
+    const p=Math.min((now-start)/dur,1);
+    spinAngle=sa+total*ease(p);
+    drawWheel();
+    if(p<1){ requestAnimationFrame(anim); return; }
+    const n=players.length, arc=(2*Math.PI)/n;
+    const top=-Math.PI/2;
+    const norm=((-spinAngle%(2*Math.PI))+2*Math.PI)%(2*Math.PI);
+    const adj=(norm+top+2*Math.PI)%(2*Math.PI);
+    const idx=Math.floor(adj/arc)%n;
+    const winner=players[(n-idx)%n];
+    document.getElementById('spin-result').textContent='🏆 '+winner;
+    isSpinning=false;
+    document.getElementById('spin-btn').disabled=false;
+  }
+  requestAnimationFrame(anim);
+}
+
+function renderWheelPlayers(){
+  const list=document.getElementById('players-list');
+  list.innerHTML=players.map((p,i)=>`<div class="player-item"><span>${i+1}. ${p}</span><button class="del-btn" onclick="delPlayer(${i})">✕</button></div>`).join('');
+  drawWheel();
+}
+function addPlayer(){
+  const inp=document.getElementById('new-player-input');
+  const n=inp.value.trim(); if(!n) return;
+  players.push(n); inp.value='';
+  renderWheelPlayers(); toast('Jugador agregado ✓');
+}
+function delPlayer(i){ players.splice(i,1); renderWheelPlayers(); toast('Eliminado'); }
+
+// ══════════════════════════════
+// INFO EDITOR
+// ══════════════════════════════
+function loadInfoFields(){
+  document.getElementById('edit-fecha').value=document.getElementById('info-fecha').textContent;
+  document.getElementById('edit-premio').value=document.getElementById('stat-prize').textContent;
+  document.getElementById('edit-whatsapp').value=document.getElementById('c-whatsapp').textContent;
+  document.getElementById('edit-instagram').value=document.getElementById('c-instagram').textContent;
+  document.getElementById('edit-discord').value=document.getElementById('c-discord').textContent;
+  document.getElementById('edit-email').value=document.getElementById('c-email').textContent;
+  document.getElementById('edit-tagline').value=document.getElementById('hero-tagline').textContent;
+}
+function saveInfo(){
+  const g=id=>document.getElementById(id).value.trim();
+  const fecha=g('edit-fecha'), premio=g('edit-premio'), wa=g('edit-whatsapp'),
+        ig=g('edit-instagram'), dc=g('edit-discord'), em=g('edit-email'), tag=g('edit-tagline');
+  if(fecha){document.getElementById('info-fecha').textContent=fecha; document.getElementById('stat-date').textContent=fecha.split(' ').slice(0,3).join(' ');}
+  if(premio){document.getElementById('info-premio').textContent=premio; document.getElementById('stat-prize').textContent=premio;}
+  if(wa) document.getElementById('c-whatsapp').textContent=wa;
+  if(ig) document.getElementById('c-instagram').textContent=ig;
+  if(dc) document.getElementById('c-discord').textContent=dc;
+  if(em) document.getElementById('c-email').textContent=em;
+  if(tag) document.getElementById('hero-tagline').textContent=tag;
+  toast('Información guardada ✓');
+}
+
+// ══════════════════════════════
+// TOAST
+// ══════════════════════════════
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+// INIT
+renderAllPublic();
+</script>
+</body>
+</html>
